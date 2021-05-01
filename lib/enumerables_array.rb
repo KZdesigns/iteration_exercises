@@ -55,7 +55,21 @@ end
 # http://stackoverflow.com/questions/827649/what-is-the-ruby-spaceship-operator
 
 class Array
-  def bubble_sort!(&prc) 
+  def bubble_sort!(&prc)
+    sorted = false
+
+    while !sorted
+      sorted = true
+
+      (0...self.length - 1).each do |i|
+        if self[i] > self[i+1]
+          self[i], self[i+1] = self[i+1], self[i]
+          sorted = false
+        end
+      end 
+    end
+
+    self
   end
 
   def bubble_sort(&prc)
