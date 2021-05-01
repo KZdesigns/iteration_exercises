@@ -1,4 +1,4 @@
-# iteration_exercises
+# Iteration_Exercises
 Implementing the following methods:
 
 - [x] #factors(num)
