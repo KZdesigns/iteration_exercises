@@ -76,9 +76,23 @@ end
 # words).
 
 def substrings(string)
+  subs = []
+
+  (0...string.length).each do |starting|
+    (starting...string.length).each do |ending|
+      subs << string[starting..ending]
+    end
+  end
+
+  subs
 end
 
+# p substrings("cat") #=> ["c", "ca", "cat", "a", "at", "t"]
+
 def subwords(word, dictionary)
+  subs = substrings(word)
+  subs.select! { |substrings| dictionary.include?(substrings) }
+  subs.uniq
 end
 
 # ### Doubler
