@@ -57,12 +57,13 @@ end
 class Array
   def bubble_sort!(&prc)
     sorted = false
+    prc ||= Proc.new { |a,b| a <=> b }
 
     while !sorted
       sorted = true
 
       (0...self.length - 1).each do |i|
-        if self[i] > self[i+1]
+        if prc.call(self[i], self[i+1]) == 1
           self[i], self[i+1] = self[i+1], self[i]
           sorted = false
         end
@@ -72,7 +73,10 @@ class Array
     self
   end
 
+
   def bubble_sort(&prc)
+    dup_array = self.dup
+    dup_array.bubble_sort!
   end
 end
 
@@ -114,6 +118,12 @@ end
 # array with the original elements multiplied by two.
 
 def doubler(array)
+  doubled = []
+  array.each do |ele|
+    doubled << ele * 2
+  end
+
+  doubled
 end
 
 # ### My Each
@@ -141,7 +151,16 @@ end
 
 class Array
   def my_each(&prc)
+    i = 0
+
+    while i < self.length
+      prc.call(self[i])
+      i += 1
+    end
+
+    self
   end
+
 end
 
 # ### My Enumerable Methods
@@ -159,14 +178,36 @@ end
 
 class Array
   def my_map(&prc)
+    mapped = []
+
+    self.my_each do |ele|
+      mapped << prc.call(ele)
+    end
+
+    mapped 
   end
 
   def my_select(&prc)
+    selected = []
+
+    self.my_each do |ele|
+      selected << ele if prc.call(ele)
+    end
+
+    selected
   end
 
   def my_inject(&blk)
+    acc = self[0]
+
+    self[1..-1].my_each do |ele|
+      acc = blk.call(acc, ele)
+    end
+
+    acc
   end
 end
+
 
 # ### Concatenate
 # Create a method that takes in an `Array` of `String`s and uses `inject`
@@ -178,4 +219,5 @@ end
 # ```
 
 def concatenate(strings)
+  strings.inject { |acc, ele| acc + ele }
 end
